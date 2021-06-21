@@ -1,0 +1,178 @@
+question==>https://codeforces.com/problemset/problem/510/C
+#include<iostream>
+#include<bits/stdc++.h>
+using namespace std;
+
+#define fio ios_base::sync_with_stdio(false);cin.tie(NULL);
+
+#define int long long
+#define l long
+#define db long double
+#define str string
+
+#define pi pair<int,int>
+#define pd pair<db,db>
+#define ps pair<str,str>
+
+#define vi vector<int>
+#define vs vector<str>
+#define vb vector<bool>
+#define vd vector<db>
+#define vpi vector<pi>
+#define vpd vector<pd>
+#define vps vector<ps>
+
+#define mp make_pair
+#define f first
+#define s second
+
+#define sz(x) (x.size())
+#define bg(x) x.begin()
+#define ed(x) x.end()
+#define all(x) bg(x),ed(x)
+#define rall(x) x.rbegin(),x.rend()
+#define sor(x) sort(all(x))
+#define ins insert
+#define ft front()
+#define bk back()
+#define pb push_back
+#define eb emplace_back
+#define pf push_front
+#define rtn return
+
+#define lb lower_bound
+#define ub upper_bound
+#define bs binary_search
+
+
+#define for0(i,n) for(int i=0;i<n;i++)
+#define for1(i,n) for(int i=1;i<=n;i++)
+#define for1_(i,n) for(int i=1;i<n;i++)
+#define rof0(i,n) for(int i=n;i>=0;i--)
+#define rof1(i,n) for(int i=n;i>=1;i--)
+#define rof0_(i,n) for(int i=n-1;i>=0;i--)
+#define rof1_(i,n) for(int i=n-1;i>=1;i--)
+#define forin(i,j,a,n,m) for(int i=0;i<n;i++) for(int j =0;j<m;j++) cin>>a[i][j]
+#define foru(it,j) for(auto it : j)
+#define w(x) while(x--)
+#define wtc(t) int t;cin>>t;while(t--)
+
+int dx4[] = {-1,0,1,0};
+int dy4[] = {0,1,0,-1};
+int dx8[] = {-1,-1,0,1,1,1,0,-1};
+int dy8[] = {0,1,1,1,0,-1,-1,-1};
+
+const int mod = 1e9+7;
+const int infl = 1e18+5;
+const int inf = 2e5+5;
+
+bool detectcycle(int node, vi adj[], int vis[], int path[])
+{
+    vis[node]=1;
+    path[node]=1;
+    foru(it,adj[node])
+    {
+        if(!vis[it])
+        {
+            if(detectcycle(it,adj,vis,path)==1)rtn 1;
+        }
+        else if(path[it])
+        {
+            rtn 1;
+        }
+    }
+    path[node]=0;
+    rtn 0;
+}
+void dfs(int node , vi adj[], int vis[], stack<int>&st)
+{
+    vis[node]=1;
+    foru(it,adj[node])
+    {
+        if(!vis[it])
+        {
+            dfs(it,adj,vis,st);
+        }
+    }
+    st.push(node);
+}
+
+signed main()
+{
+    int n;
+    cin>>n;
+    vs v;
+    for0(i,n)
+    {
+        str s;
+        cin>>s;
+        v.pb(s);
+    }
+    vi adj[26];
+    str s1,s2;
+    int n1,n2,flag=0;
+    for0(i,n-1)
+    {
+        if(flag==1)
+        {
+            break;
+        }
+        s1=v[i];
+        s2=v[i+1];
+        n1=sz(s1);
+        n2=sz(s2);
+        for0(j,n1)
+        {
+            if(j>=n2)
+            {
+                cout<<"Impossible\n";// eg  catalyst as s1 and cat as s2 
+                flag=1;
+                break;
+            }
+            if(s1[j]!=s2[j])
+            {
+                adj[s1[j]-'a'].pb(s2[j]-'a');
+                break;
+            }
+        }
+    }
+    if(flag==0)
+    {
+        int f=0;
+        int vis[26]={0},path[26]={0};
+        for0(i,26)
+        {
+            if(!vis[i])
+            {
+                f = f||detectcycle(i,adj,vis,path);// if cycle found then we will print impossible
+            }
+        }
+        if(f)
+        {
+            cout<<"Impossible\n";
+        }
+        else
+        {
+            for0(i,26)
+            {
+                vis[i]=0;
+            }
+            stack<int>st;
+            for0(i,26)// if not impossible then print permutation of alphabet letter which is possible lexicographical order using toposort using stack
+            {
+                if(!vis[i])
+                {
+                    dfs(i,adj,vis,st);
+                }
+            }
+            while(!st.empty())
+            {
+               // cout<<"1";
+                cout<<(char)(st.top()+'a');
+                st.pop();
+            }
+            cout<<"\n";
+        }
+    }
+    rtn 0;
+}
