@@ -118,6 +118,6 @@ signed main()
   int src;
   cin>>src;
   dist[src]=0;
-  dijkastra(adj,dist,src,parent);
+  dijkastra(adj,dist,src,parent);// we are using bfs method we can't use dfs because it will increase time complexity of program
     rtn 0;
 } 
