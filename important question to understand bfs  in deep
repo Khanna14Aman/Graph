@@ -1,0 +1,59 @@
+question==>https://cses.fi/problemset/task/1192
+#include<bits/stdc++.h>
+using namespace std;
+int dx4[] = {-1,0,1,0};
+int dy4[] = {0,1,0,-1};
+int n,m;
+int x,y;
+char c[1000][1000];
+int vis[1000][1000];
+int bfs(int i,int j)
+{
+    queue<pair<int,int>>q;
+    q.push({i,j});
+    while(!q.empty())
+    {
+        i = q.front().first;
+        j = q.front().second;
+        q.pop();
+        for(int ind=0;ind<4;ind++)
+        {
+            int newi = i+dx4[ind];
+            int newj = j+dy4[ind];
+            if(c[newi][newj]=='.' && newi>=0 && newj>=0 && newi <n && newj < m && vis[newi][newj]==0)
+            {
+                q.push({newi,newj});
+                vis[newi][newj]=1;
+            }
+        }
+    }
+    return 1;
+    
+}
+int main()
+{
+    int i,j;
+    cin>>n>>m;
+    for(i=0;i<n;i++)
+    {
+        for(j=0;j<m;j++)
+        {
+            cin>>c[i][j];
+            vis[i][j]=0;
+        }
+    }
+    int sum = 0;
+    for(i=0;i<n;i++)
+    {
+        for(j=0;j<m;j++)
+        {
+            if(c[i][j]=='.' && vis[i][j]==0)
+            {
+                vis[i][j]=1;
+                sum += bfs(i,j);
+            }
+        }
+    }
+   cout<<sum<<endl;
+    return 0;
+}
