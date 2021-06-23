@@ -1,0 +1,162 @@
+// kindly go to video explation by striver on gfg cp course..
+//question==>https://codeforces.com/contest/59/problem/E
+#include<iostream>
+#include<bits/stdc++.h>
+using namespace std;
+
+#define fio ios_base::sync_with_stdio(false);cin.tie(NULL);
+
+#define int long long
+#define l long
+#define db long double
+#define str string
+
+#define pi pair<int,int>
+#define pd pair<db,db>
+#define ps pair<str,str>
+
+#define vi vector<int>
+#define vs vector<str>
+#define vb vector<bool>
+#define vd vector<db>
+#define vpi vector<pi>
+#define vpd vector<pd>
+#define vps vector<ps>
+
+#define mp make_pair
+#define f first
+#define s second
+
+#define sz(x) (x.size())
+#define bg(x) x.begin()
+#define ed(x) x.end()
+#define all(x) bg(x),ed(x)
+#define rall(x) x.rbegin(),x.rend()
+#define sor(x) sort(all(x))
+#define sord(x) sort(all(x),greater<int>())
+#define ins insert
+#define ft front()
+#define bk back()
+#define pb push_back
+#define eb emplace_back
+#define pf push_front
+#define rtn return
+
+#define lb lower_bound
+#define ub upper_bound
+#define bs binary_search
+
+
+#define for0(i,n) for(int i=0;i<n;i++)
+#define for1(i,n) for(int i=1;i<=n;i++)
+#define for1_(i,n) for(int i=1;i<n;i++)
+#define rof0(i,n) for(int i=n;i>=0;i--)
+#define rof1(i,n) for(int i=n;i>=1;i--)
+#define rof0_(i,n) for(int i=n-1;i>=0;i--)
+#define rof1_(i,n) for(int i=n-1;i>=1;i--)
+#define forin(i,j,a,n,m) for(int i=0;i<n;i++) for(int j =0;j<m;j++) cin>>a[i][j]
+#define foru(it,j) for(auto it : j)
+#define w(x) while(x--)
+#define wtc(t) int t;cin>>t;while(t--)
+
+int dx4[] = {-1,0,1,0};
+int dy4[] = {0,1,0,-1};
+int dx8[] = {-1,-1,0,1,1,1,0,-1};
+int dy8[] = {0,1,1,1,0,-1,-1,-1};
+
+const int mod = 1e9+7;
+const int infl = 1e18+5;
+const int inf = 2e5+5;
+
+#define minpqint priority_queue<int, vi, greater<int>>
+#define minpqpi priority_queue<pi,vpi,greater<pi>>
+#define maxpqint priority_queue<int>
+#define maxpqpi priority_queue<pi> 
+
+
+signed main()
+{
+    int n,m,k,u,v;
+    cin>>n>>m>>k;
+    vi adj[n+1];
+    for0(i,m)
+    {
+        cin>>u>>v;
+        adj[u].eb(v);
+        adj[v].eb(u);
+    }
+    map< pair<int,pair<int,int>>,int> mpp; // as map requires 2 arguments first one is key and second one is value for that key ; we can use set also with the help of structure we can push all value in set;
+    int a,b,c;
+    for0(i,k)
+    {
+        cin>>a>>b>>c;
+        mpp[{a,{b,c}}]++;
+    }
+    int dist[n+1][n+1];
+    for1(i,n)
+    {
+        for1(j,n)
+        {
+            dist[i][j]=infl;
+        }
+    }
+    dist[1][1]=0;
+    priority_queue<pair<int,pair<int,int>>,vector<pair<int,pair<int,int>>>,greater<pair<int,pair<int,int>>>> pq;
+    pq.push({0,{1,1}});
+    while(!pq.empty())
+    {
+        int d = pq.top().first;
+        int node = pq.top().second.first;
+        int par = pq.top().second.second;
+        pq.pop();
+        foru(it,adj[node])
+        {
+            if(d+1<dist[it][node] && mpp[{par,{node,it}}]!=1)
+            {
+                dist[it][node]=d+1;
+                pq.push({dist[it][node],{it,node}});
+            }
+        }
+    } 
+    int ans = infl, par;
+    stack<int>st;
+    st.push(n);
+    for1(i,n)
+    {
+        if(dist[n][i]<ans)
+        {
+            ans = dist[n][i];
+            par = i;
+        }
+    }
+    if(ans==infl)
+    {
+        cout<<"-1\n";
+    }
+    else
+    {
+    st.push(par);
+    //cout<<ans<<par;
+    while(par!=1)
+    {
+        for1(i,n)
+        {
+            if(dist[par][i]==ans-1)
+            {
+                par=i;
+                ans = ans-1;
+                st.push(par);
+                break;
+            }
+        }
+    }
+    cout<<st.size()-1<<"\n";
+    while(!st.empty())
+    {
+        cout<<st.top()<<"  ";
+        st.pop();
+    }
+    }
+
+    rtn 0;
+} 
