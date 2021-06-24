@@ -1,3 +1,4 @@
+question==>https://cses.fi/problemset/task/1193/
 solution that will be same in logic and time complexity but give you tle in one test cases==>https://cses.fi/paste/7ed1e0f4248674cf249f5b/
 #include<bits/stdc++.h>
 using namespace std;
