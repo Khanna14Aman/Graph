@@ -1,0 +1,82 @@
+solution that will be same in logic and time complexity but give you tle in one test cases==>https://cses.fi/paste/7ed1e0f4248674cf249f5b/
+#include<bits/stdc++.h>
+using namespace std;
+int dx4[] = {-1,0,1,0};
+int dy4[] = {0,1,0,-1},parent[1000][1000];// parent array will store the direction which you choose to move ; if we use string here that will give tle see the above link
+string s = "URDL";
+int n,m,vis[1000][1000];
+char c[1000][1000];
+bool bfs(int i, int j)
+{
+    queue<pair<int,int>> q;
+    q.push({i,j});
+    int ind;
+    while(!q.empty())
+    {
+        i = q.front().first;
+        j = q.front().second;
+        q.pop();
+        for(ind=0;ind<4;ind++)
+        {
+            int newi = i+dx4[ind];
+            int newj = j+dy4[ind];
+            if((c[newi][newj]=='.' || c[newi][newj]=='B') && newi>=0 && newj>=0 && newi<n && newj<m && vis[newi][newj]==0)
+            {
+                vis[newi][newj]=1;
+                parent[newi][newj]=ind;
+                if(c[newi][newj]=='B') return true; // this will take care that we get shortest distance means who will reach first that moment we stop doing bfs;
+                q.push({newi,newj});
+            }
+        }
+    }
+    return false;
+}
+int main()
+{
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    int i,j;
+    pair<int,int> start,end;// this will store the position of A and B
+    cin>>n>>m;
+    for(i=0;i<n;i++)
+    {
+        for(j=0;j<m;j++)
+        {
+            cin>>c[i][j];
+            vis[i][j]=0;
+            if(c[i][j]=='A')
+            {
+                start = {i,j};
+            } 
+            if(c[i][j]=='B')
+            {
+                end = {i,j};
+            }
+        }
+    }
+    
+    if(bfs(start.first,start.second)==0)
+    {
+        cout<<"NO\n";
+    }
+    else
+    {
+        cout<<"YES\n";
+        vector<char> v;
+        while(end!=start)
+        {
+        int p = parent[end.first][end.second]; // this will store that in which direction we moved means 0,1,2 or 3 so that we can take that value from string;
+        v.emplace_back(p);
+        end = {end.first-dx4[p],end.second-dy4[p]};  // suppose we move left so value will be 3 for that so we need to find from where we move left so for that we use this formula; 
+        }
+        n = v.size();
+        cout<<n<<endl;
+        reverse(v.begin(),v.end());
+        for(i=0;i<n;i++)
+        {
+            cout<<s[v[i]];
+        }
+        cout<<endl;
+    }
+    return 0;
+}
