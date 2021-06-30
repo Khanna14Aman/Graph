@@ -1,0 +1,141 @@
+question==>https://cses.fi/problemset/task/1197/
+video solution==>https://www.youtube.com/watch?v=kZfm68XKC58  // go through this to understand better
+another solution for this question==>https://github.com/jt112/graph/blob/master/Cycle%20Finding
+#include<iostream>
+#include<bits/stdc++.h>
+using namespace std;
+ 
+#define fio ios_base::sync_with_stdio(false);cin.tie(NULL);
+ 
+#define int long long
+#define l long
+#define db long double
+#define str string
+ 
+#define pi pair<int,int>
+#define pd pair<db,db>
+#define ps pair<str,str>
+ 
+#define vi vector<int>
+#define vs vector<str>
+#define vb vector<bool>
+#define vd vector<db>
+#define vpi vector<pi>
+#define vpd vector<pd>
+#define vps vector<ps>
+ 
+#define mp make_pair
+#define f first
+#define s second
+ 
+#define sz(x) (x.size())
+#define bg(x) x.begin()
+#define ed(x) x.end()
+#define all(x) bg(x),ed(x)
+#define rall(x) x.rbegin(),x.rend()
+#define sor(x) sort(all(x))
+#define ins insert
+#define ft front()
+#define bk back()
+#define pb push_back
+#define eb emplace_back
+#define pf push_front
+#define rtn return
+ 
+#define lb lower_bound
+#define ub upper_bound
+#define bs binary_search
+ 
+ 
+#define for0(i,n) for(int i=0;i<n;i++)
+#define for1(i,n) for(int i=1;i<=n;i++)
+#define for1_(i,n) for(int i=1;i<n;i++)
+#define rof0(i,n) for(int i=n;i>=0;i--)
+#define rof1(i,n) for(int i=n;i>=1;i--)
+#define rof0_(i,n) for(int i=n-1;i>=0;i--)
+#define rof1_(i,n) for(int i=n-1;i>=1;i--)
+#define forin(i,j,a,n,m) for(int i=0;i<n;i++) for(int j =0;j<m;j++) cin>>a[i][j]
+#define foru(it,j) for(auto it : j)
+#define w(x) while(x--)
+#define wtc(t) int t;cin>>t;while(t--)
+ 
+int dx4[] = {-1,0,1,0};
+int dy4[] = {0,1,0,-1};
+int dx8[] = {-1,-1,0,1,1,1,0,-1};
+int dy8[] = {0,1,1,1,0,-1,-1,-1};
+ 
+const int mod = 1e9+7;
+const int infl = 1e18+5;
+const int inf = 2e5+5;
+ 
+struct node
+{
+    int u,v,w;
+    node(int _u,int _v,int _w)
+    {
+        u=_u;
+        v=_v;
+        w=_w;
+    }
+};
+ 
+signed main()
+{
+    int n,m,u,v,w;
+    cin>>n>>m;
+    vector<node>adj;
+    vi dist(n+1,infl);
+    vi parent(n+1,-1);
+    for0(i,m)
+    {
+        cin>>u>>v>>w;
+        adj.pb(node(u,v,w));
+    }
+    dist[1]=0;
+    for1(i,n-1)
+    {
+        foru(it,adj)
+        {
+            if(dist[it.u]+it.w<dist[it.v])
+            {
+                dist[it.v]=dist[it.u]+it.w;
+                parent[it.v]=it.u;
+            }
+        }
+    }
+    int y=-1;
+    foru(it,adj)
+    {
+        if(dist[it.u]+it.w<dist[it.v])
+        {
+            dist[it.v]=dist[it.u]+it.w;
+            y=it.v;
+            parent[it.v]=it.u;
+        }
+    }
+    if(y==-1)
+    {
+        cout<<"NO\n";
+        rtn 0;
+    }
+    for1(i,n)  // this line is heart of this question please need to understand this traceback why we do like this
+    {
+        y=parent[y];
+    }
+    stack<int>st;
+    st.push(y);
+    int x = y;
+    do
+    {
+        y=parent[y];
+        st.push(y);
+    }while(y!=x);
+    cout<<"YES\n";
+    n = sz(st);
+    for0(i,n)
+    {
+        cout<<st.top()<<" ";
+        st.pop();
+    }
+    rtn 0;
+}
