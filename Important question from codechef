@@ -1,0 +1,74 @@
+question==>https://www.codechef.com/CDMN21B/problems/PLNTPATH
+
+solution==>https://www.codechef.com/viewsolution/50559815
+
+simply dijkshtra algorithm
+
+#include<bits/stdc++.h>
+#define int long long 
+using namespace std;
+signed main(){
+    int n,k,s;
+    cin>>n>>k>>s;
+    vector<int>arr(n+1,0);
+    int i;
+    map<int,vector<int>>alliance;
+    for(i=1;i<=n;i++){
+        cin>>arr[i];
+        alliance[arr[i]].push_back(i);
+    }
+    
+    for(auto it:alliance){
+        sort(it.second.begin(),it.second.end());
+    }
+    
+    vector<vector<pair<int,int>>>graph(n+1);
+    
+    int j,cost;
+    for(i=1;i<=n;i++){
+        for(j=1;j<=k;j++){
+            cin>>cost;
+            if(cost==-1 || arr[i]==j)continue;
+            
+            if(!alliance[j].empty())graph[i].push_back({alliance[j][0],cost});
+        }
+    }
+    
+    for(auto it:alliance){
+        vector<int>friends=it.second;
+        for(i=1;i<friends.size();i++){
+            graph[friends[i]].push_back({friends[i-1],0});
+            graph[friends[i-1]].push_back({friends[i],0});
+        }
+    }
+    
+    priority_queue<pair<int,int>,vector<pair<int,int>>,greater<pair<int,int>>>pq;
+    pq.push({s,0});
+    
+    vector<int>dist(n+1,LONG_MAX);
+    dist[s]=0;
+    while(!pq.empty()){
+        auto u=pq.top();
+        pq.pop();
+        for(i=0;i<graph[u.first].size();i++){
+            int v = graph[u.first][i].first;
+            int d=graph[u.first][i].second;
+            if(dist[v]>d+u.second){
+                dist[v]=d+u.second;
+                pq.push({v,dist[v]});
+            }
+        }
+    }
+    
+    for(i=1;i<=n;i++){
+        if(dist[i]>=LONG_MAX){
+            cout<<"-1 ";
+        }
+        else{
+            cout<<dist[i]<<" ";
+        }
+    }
+    cout<<"\n";
+    
+    return 0;
+}
