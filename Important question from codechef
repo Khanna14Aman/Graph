@@ -2,6 +2,8 @@ question==>https://www.codechef.com/CDMN21B/problems/PLNTPATH
 
 solution==>https://www.codechef.com/viewsolution/50559815
 
+another solution==>https://www.codechef.com/viewsolution/50576207
+
 simply dijkshtra algorithm
 
 #include<bits/stdc++.h>
